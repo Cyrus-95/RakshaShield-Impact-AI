@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RakshaShield – Digital Safety Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1330;--navy2:#111d45;--blue:#3b82f6;--blue2:#60a5fa;--bg:#f4f6fb;--card:#fff;--line:#e3e8f2;--ink:#0f1a3a;--mute:#5b6784;--red:#dc2626;--redbg:#fef2f2;--amb:#d97706;--ambbg:#fffbeb;--grn:#15803d;--grnbg:#f0fdf4}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.55}
+h1,h2,h3,h4{font-family:Sora,sans-serif;line-height:1.25;letter-spacing:-.01em}
+#app{display:flex;min-height:100vh}
+nav{width:250px;background:linear-gradient(180deg,var(--navy),var(--navy2));color:#cfd8f5;padding:22px 14px;position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;gap:6px;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;font:700 20px Sora;padding:0 8px 22px}
+.logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--blue),#1d4ed8);display:grid;place-items:center;font-size:18px}
+nav button{display:flex;gap:12px;align-items:center;background:none;border:0;color:inherit;font:500 15px Inter;padding:13px 14px;border-radius:12px;cursor:pointer;text-align:left;transition:.2s}
+nav button:hover{background:rgba(255,255,255,.07)}
+nav button.on{background:rgba(59,130,246,.18);color:#fff;box-shadow:inset 3px 0 0 var(--blue2)}
+nav .sos{margin-top:auto;background:rgba(220,38,38,.15);color:#fecaca}
+main{margin-left:250px;flex:1;padding:36px 40px 60px;max-width:1100px}
+.view{display:none;animation:in .35s ease}.view.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+.eyebrow{font:600 12px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+h1{font-size:32px;margin:6px 0 8px}h2{font-size:22px;margin:34px 0 14px}
+.sub{color:var(--mute);max-width:620px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+.hero{background:radial-gradient(circle at 90% 0,rgba(59,130,246,.35),transparent 50%),var(--navy);color:#fff;border:0;padding:30px;margin:22px 0;border-radius:22px}
+.hero h3{font-size:24px;margin-bottom:8px}.hero p{color:#b9c6ee;margin-bottom:18px}
+.btn{font:600 15px Inter;border:0;border-radius:12px;padding:14px 22px;cursor:pointer;background:var(--blue);color:#fff;transition:.2s;min-height:48px}
+.btn:hover{background:#2563eb;transform:translateY(-1px)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{background:#f1f5fd}
+.btn.red{background:var(--red)}.btn.sm{padding:9px 14px;min-height:0;font-size:13px}
+.grid{display:grid;gap:16px}.g3{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}.g2{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.act{cursor:pointer;transition:.2s}.act:hover{border-color:var(--blue2);transform:translateY(-3px);box-shadow:0 10px 26px rgba(15,26,58,.08)}
+.ic{width:46px;height:46px;border-radius:14px;background:#e8f0ff;display:grid;place-items:center;font-size:22px;margin-bottom:12px}
+.card h4{font-size:17px;margin-bottom:6px}.card p{color:var(--mute);font-size:14.5px}
+.tag{display:inline-block;font:600 11px Inter;padding:3px 9px;border-radius:99px;background:#eef2ff;color:#3730a3;margin-top:10px}
+.tag.demo{background:var(--ambbg);color:#92400e}
+.tip{border-left:4px solid var(--grn);background:var(--grnbg)}
+input,textarea,select{width:100%;font:16px Inter;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+textarea{min-height:150px;resize:vertical}input:focus,textarea:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,.15)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 14px}
+.tab{padding:11px 18px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:600 14px Inter;cursor:pointer}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.chip{font:13.5px Inter;padding:8px 13px;border-radius:99px;background:#eef2ff;color:#2a3a8c;border:0;cursor:pointer}.chip:hover{background:#dbe5ff}
+.err{color:var(--red);font-size:14px;margin-top:8px;min-height:18px}
+.risk{border-radius:18px;padding:22px;display:flex;gap:16px;align-items:center;margin:20px 0}
+.risk b{font:800 26px Sora;display:block}
+.risk.high{background:var(--redbg);color:#991b1b;border:1px solid #fecaca}.risk.med{background:var(--ambbg);color:#92400e;border:1px solid #fde68a}.risk.low{background:var(--grnbg);color:#166534;border:1px solid #bbf7d0}
+.risk .big{font-size:38px}
+.pill{display:inline-block;padding:7px 13px;border-radius:99px;background:var(--redbg);color:#991b1b;font:600 13.5px Inter;margin:0 6px 8px 0}
+.pill.med{background:var(--ambbg);color:#92400e}
+ol.steps{padding-left:0;list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+ol.steps li:before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font:700 13px Sora}
+.safety{background:var(--navy);color:#fff;border-radius:24px;padding:34px;text-align:center}
+.safety h1{color:#fff;font-size:30px}.warn{background:var(--red);color:#fff;border-radius:14px;padding:16px;font-weight:600;margin:20px auto;max-width:620px}
+.chk{display:flex;gap:12px;align-items:center;text-align:left;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:15px;margin:10px auto;max-width:620px;cursor:pointer}
+.chk input{width:22px;height:22px;flex:none;accent-color:var(--blue)}
+.help{background:#fff;color:var(--ink);border-radius:16px;padding:18px;max-width:620px;margin:22px auto;text-align:left}
+.help a{color:var(--blue);font-weight:600}.num{font:800 30px Sora;color:var(--red)}
+.opts{display:grid;gap:10px;margin-top:14px}.opt{display:block;text-align:left;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font:500 15px Inter}
+.opt:hover{border-color:var(--blue)}.opt.ok{background:var(--grnbg);border-color:var(--grn)}.opt.no{background:var(--redbg);border-color:var(--red)}
+.modal{position:fixed;inset:0;background:rgba(10,19,48,.6);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.on{display:flex}.sheet{background:#fff;border-radius:22px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:26px}
+.sheet h4{margin:16px 0 4px;font-size:15px;color:var(--blue)}.sheet ul{padding-left:20px;color:var(--mute)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bar{height:10px;background:#e5eaf5;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.mobnav{display:none}
+@media(max-width:860px){nav{display:none}main{margin:0;padding:22px 16px 110px}h1{font-size:26px}
+.mobnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--navy);z-index:30;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.mobnav button{flex:1;background:none;border:0;color:#9fb0e6;font:500 10.5px Inter;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+.mobnav button span{font-size:20px}.mobnav button.on{color:#fff}.mobnav .sos{color:#fca5a5}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style><link rel="stylesheet" href="mvp.css"></head><body>
+<div id="app">
+<nav id="nav"></nav>
+<main>
+<section class="view" id="home">
+ <div class="row"><div><div class="eyebrow">RakshaShield</div><h1>Your digital safety matters.</h1><p class="sub">Stay informed. Recognise threats. Take action.</p></div></div>
+ <div class="card hero"><h3>Not sure if something is a scam?</h3><p>Paste a message or describe what is happening. We will point out warning signs and next steps.</p><button class="btn" data-go="check">Check a Suspicious Situation</button></div>
+ <div class="grid g3">
+  <div class="card act" data-go="learn"><div class="ic">📘</div><h4>Learn Before You Trust</h4><p>Explore current digital scams and learn how they work.</p></div>
+  <div class="card act" data-go="check"><div class="ic">🔍</div><h4>Check Something Suspicious</h4><p>Paste a message, enter a number, or describe a suspicious interaction.</p></div>
+  <div class="card act" data-go="safety"><div class="ic">🛑</div><h4>Need Immediate Help?</h4><p>Access emergency steps if someone is threatening or pressuring you.</p></div>
+ </div>
+ <h2>Scams You Should Know About</h2><div class="grid g3" id="homeScams"></div>
+ <div class="card tip" style="margin-top:26px"><div class="eyebrow" style="color:var(--grn)">Safety tip of the day</div><p id="tip" style="color:var(--ink);margin-top:4px"></p></div>
+</section>
+
+<section class="view" id="learn">
+ <div class="eyebrow">Learn & Stay Informed</div><h1>Know the scam before it knows you.</h1>
+ <p class="sub">Sample educational content for this prototype. Not live news.</p>
+ <div class="row" style="margin:20px 0 4px;gap:12px"><input id="q" placeholder="Search scams (e.g. parcel, OTP, arrest)" style="max-width:420px"></div>
+ <h2>Recently Reported Scam Patterns <span class="tag demo">Sample information</span></h2>
+ <div class="grid g3" id="scamList"></div>
+ <h2>How Scammers Manipulate You</h2><div class="grid g3" id="tactics"></div>
+ <h2>Know Your Rights. Follow Safe Banking Practices.</h2>
+ <p class="sub" style="margin-bottom:14px">Sample educational content. Verify against official sources before relying on it.</p>
+ <div class="grid g2" id="rbi"></div>
+ <div class="chips"><a class="chip" href="https://www.rbi.org.in" target="_blank" rel="noopener">RBI official site ↗</a><a class="chip" href="https://www.npci.org.in" target="_blank" rel="noopener">NPCI ↗</a><a class="chip" href="https://cybercrime.gov.in" target="_blank" rel="noopener">Cybercrime portal ↗</a></div>
+ <h2>Would You Recognise This Scam?</h2><div class="card" id="quiz"></div>
+</section>
+
+<section class="view" id="check">
+ <div class="eyebrow">Check</div><h1>Something Doesn't Feel Right?</h1>
+ <p class="sub">Tell us what happened. We'll help you understand the warning signs and what to do next.</p>
+ <div class="tabs"><button class="tab on" data-t="msg">Paste a message</button><button class="tab" data-t="num">Enter a number</button><button class="tab" data-t="desc">Describe what is happening</button></div>
+ <div class="card">
+  <div id="t-msg"><textarea id="msg" placeholder="Paste an SMS, WhatsApp message, email, notice or offer here..."></textarea>
+   <div class="chips"><span class="sub" style="font-size:13px">Try a sample:</span><button class="chip" data-s="Your Aadhaar has been linked to a criminal case. You must join a video call immediately. Do not tell anyone.">Digital arrest</button><button class="chip" data-s="Your parcel has been seized because illegal items were found. Pay the customs penalty immediately.">Fake parcel</button><button class="chip" data-s="Your bank account will be suspended. Share your OTP to complete KYC.">Bank OTP</button><button class="chip" data-s="Invest ₹5,000 today and receive guaranteed returns of ₹50,000 next week.">Investment</button><button class="chip" data-s="Your bank statement is available in your official banking application.">Ordinary</button></div></div>
+  <div id="t-num" hidden><input id="num" inputmode="tel" placeholder="+91 98765 43210"><p class="sub" style="font-size:14px;margin-top:10px">Number reputation lookup needs a separate service, planned as a future integration. We cannot identify the owner of a number here.</p></div>
+  <div id="t-desc" hidden><textarea id="desc" placeholder="Someone is calling or talking to me. What are they saying?"></textarea>
+   <div class="chips"><button class="chip" data-d="Someone says I am involved in a crime.">Involved in a crime</button><button class="chip" data-d="Someone says my parcel contains illegal items.">Illegal parcel</button><button class="chip" data-d="Someone claims to be from the CBI or police and says I must stay on a video call.">CBI / police</button><button class="chip" data-d="Someone says my bank account will be blocked.">Account blocked</button><button class="chip" data-d="Someone is asking me to transfer money immediately.">Transfer money</button><button class="chip" data-d="Someone is asking me to share my screen.">Share screen</button></div></div>
+  <div class="err" id="err"></div>
+  <button class="btn" id="analyse" style="margin-top:8px;width:100%">Analyse My Situation</button>
+ </div>
+ <div id="result" style="margin-top:26px"></div>
+</section>
+
+<section class="view" id="safety">
+ <div class="safety"><div class="eyebrow" style="color:var(--blue2)">Emergency Safety Mode</div>
+ <h1>STOP. Take a Moment. You Are in Control.</h1>
+ <div class="warn">Do not transfer money or share sensitive information while someone is pressuring or threatening you.</div>
+ <div id="aiSafety"></div><div id="sc"></div><p id="scMsg" style="margin:16px auto;max-width:620px;color:#cbd6f7"></p>
+ <div class="help"><div class="eyebrow" style="color:var(--red)">Indian cybercrime help</div><div class="num">1930</div><p>Cybercrime helpline. Report online at <a href="https://cybercrime.gov.in/" target="_blank" rel="noopener">cybercrime.gov.in</a> (National Cyber Crime Reporting Portal).</p><p style="margin-top:8px;color:var(--mute);font-size:14px">If you suspect a transaction was compromised, contact your bank immediately. RakshaShield cannot freeze accounts, stop UPI payments or contact police.</p></div>
+ <div class="row" style="justify-content:center"><button class="btn" data-act="alert">Alert My Trusted Person</button><a class="btn ghost" style="text-decoration:none;display:inline-flex;align-items:center" href="https://cybercrime.gov.in/" target="_blank" rel="noopener">View Official Reporting Options</a><button class="btn ghost" data-go="home">Return to Safety Dashboard</button></div></div>
+</section>
+
+<section class="view" id="mysafety">
+ <div class="eyebrow">My Safety</div><h1>Your personal safety space</h1><p class="sub">Stored only in this browser (LocalStorage). Nothing is sent anywhere.</p>
+ <h2>Learning progress</h2><div class="card"><div class="row"><b id="prog">0/4 quiz questions answered</b></div><div class="bar" style="margin-top:10px"><i id="bar" style="width:0"></i></div></div>
+ <h2>Trusted contacts</h2><div class="card"><div class="row" style="gap:10px"><input id="cn" placeholder="Name" style="flex:1;min-width:140px"><input id="cr" placeholder="Relationship" style="flex:1;min-width:140px"><button class="btn" id="addc">Add</button></div><div id="contacts" style="margin-top:12px"></div></div>
+ <h2>Saved incidents</h2><div id="incs"></div>
+ <h2>Personal safety checklist</h2><div class="card" id="plist"></div>
+</section>
+<section class="view" id="family"><div class="eyebrow">Family Guardian</div><h1>Your family circle</h1><p class="sub">Five fictional demo members. Switch between them to see how an alert travels.</p><div id="familyBox" style="margin-top:18px"></div></section>
+<section class="view" id="locker"><div class="eyebrow">Evidence Locker</div><h1>Saved incidents</h1><p class="sub">Stored only in this browser. Nothing is saved unless you choose to.</p><div id="lockerBox" style="margin-top:18px"></div></section>
+</main></div>
+<div class="mobnav" id="mnav"></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const LS={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- DATA ---------- */
+const SCAMS=[
+{n:'Digital Arrest Scam',i:'👮',s:'Callers pose as police or agencies and claim you are under "digital arrest".',how:'They call or video-call, claim a crime is linked to your identity, and keep you on the line.',want:'Money transfers and control through fear.',warn:['Video call from "officers"','Told not to tell family','Arrest threats','Demand to pay to "clear" your name'],prot:['Hang up. Real agencies do not arrest people over video call.','Verify through official numbers you find yourself.','Talk to someone you trust.'],after:['Call 1930 and report at cybercrime.gov.in.','Inform your bank immediately.']},
+{n:'Fake Parcel / Customs Scam',i:'📦',s:'A call or message says your parcel has illegal items or is held by customs.',how:'You are pushed to "clear" the parcel by paying a fee or speaking to a fake officer.',want:'Customs fees, personal details.',warn:['Parcel you never ordered','Immediate penalty','Unofficial payment links'],prot:['Check tracking on the courier\'s official app.','Never pay fees through links sent to you.'],after:['Report at cybercrime.gov.in and tell your bank.']},
+{n:'Bank KYC and OTP Scam',i:'🏦',s:'A message says your account will be blocked unless you update KYC.',how:'You are sent to a fake link or asked to read out an OTP.',want:'OTP, PIN, card details.',warn:['Account suspension threat','Link in SMS','Request for OTP'],prot:['Never share OTP, PIN, CVV or passwords.','Use only your bank\'s official app or branch.'],after:['Call your bank at once and block cards.','Report on 1930.']},
+{n:'Investment and Trading Scam',i:'📈',s:'Offers of guaranteed or unusually high returns through apps or groups.',how:'Small early "profits" build trust, then larger deposits are requested.',want:'Increasing deposits.',warn:['"Guaranteed" returns','Pressure to invest today','Unregistered platforms'],prot:['No investment is risk free.','Check that the platform is registered with the regulator.'],after:['Stop paying, keep records, report on 1930.']},
+{n:'Fake Job and Work-from-Home Scam',i:'💼',s:'Easy online tasks that pay well, until you are asked to pay first.',how:'You get small payouts, then are asked to "deposit" to unlock more.',want:'Deposits and personal documents.',warn:['Fees to get a job','Tasks like liking videos for pay','Chat-only recruiters'],prot:['Real employers do not charge to hire you.'],after:['Stop paying and report the account and chat.']},
+{n:'UPI Payment and QR Code Scam',i:'📱',s:'You are asked to scan a QR or approve a request to "receive" money.',how:'Scanning or entering a PIN sends money out, never in.',want:'Your UPI PIN and approval.',warn:['"Scan to receive money"','Collect requests you did not expect'],prot:['You never need a PIN to receive money.','Read every request before approving.'],after:['Contact your bank and UPI app support at once.']},
+{n:'Loan App Scam',i:'💸',s:'Instant loan apps that demand permissions and harass borrowers.',how:'Apps access contacts and photos, then threaten to shame you.',want:'Excess repayments and access to your data.',warn:['Unknown lending apps','Requests for contacts and gallery','Abusive recovery calls'],prot:['Borrow only from regulated lenders.','Deny unnecessary permissions.'],after:['Report harassment at cybercrime.gov.in.']},
+{n:'Impersonation and Social Engineering',i:'🎭',s:'Someone pretends to be a relative, official or company to gain trust.',how:'They build urgency, then ask for money or information.',want:'Money, data, access.',warn:['"New number" messages from family','Urgent secret requests'],prot:['Call the person on their known number.','Pause before acting.'],after:['Report the number and warn your contacts.']}];
+const TACTICS=[['😨','Fear and intimidation','"Your case is serious. You may be arrested."'],['⏱️','Urgency and pressure','"Do it in the next 30 minutes."'],['🛂','Authority impersonation','"I am an officer from the central agency."'],['🏠','Isolation from family','"Do not tell your family. They will ruin this."'],['🤫','Secrecy','"This is confidential. Tell no one."'],['⚖️','Threats of arrest or legal action','"A warrant will be issued today."'],['💰','Promises of easy money','"Double your money by next week."'],['🔑','Requests for OTP, PIN, passwords or remote access','"Install this app so we can help."']];
+const RBI=[['Never share OTP, PIN, CVV or passwords','No genuine bank or authority needs your confidential credentials.'],['Banks should not ask for credentials','Treat any such request as a red flag, even if the caller sounds official.'],['Avoid unknown banking links','Open your bank\'s app or type its address yourself.'],['Verify independently','Use contact details you found from official sources, not those given by the caller.'],['Report promptly','Call 1930 and your bank quickly if you suspect financial cyber fraud.']];
+const QUIZ=[{t:'A caller says you are on "digital arrest" and must stay on video call and tell no one.',a:'d',e:'Dangerous. Legitimate agencies do not arrest people by video call or demand secrecy.'},{t:'An SMS from your bank says "Your monthly statement is ready in the official app."',a:'s',e:'Likely safe, but open the official app yourself rather than any link.'},{t:'A stranger offers 300% returns in a week and asks you to invest today.',a:'x',e:'Suspicious. Guaranteed high returns with time pressure are a classic scam sign.'},{t:'A message says to scan a QR code to receive a refund.',a:'d',e:'Dangerous. Scanning a QR and entering a PIN sends money out, not in.'}];
+const TIPS=['A real bank will never ask for your OTP or PIN.','Pause. Scammers rely on you acting before you think.','No agency arrests anyone over a video call.','Call a family member before you pay anyone under pressure.'];
+const CHECK=['I will never share OTP, PIN, CVV or passwords','I know the cybercrime helpline is 1930','I have told a trusted person about common scams','I verify unknown callers using official contacts','I keep my bank\'s official number saved'];
+
+/* ---------- ANALYSIS ENGINE (swap for real AI later) ---------- */
+const SIG={
+authority:{r:/(cbi|police|court|customs|trai|rbi|officer|inspector|narcotics|agency)/i,w:1,l:'Authority impersonation',want:'Control over you through fear of authority'},
+threat:{r:/(arrest|seized|illegal|criminal|case|suspended|blocked|warrant|legal action|penalty)/i,w:2,l:'Threats or intimidation',want:'Control over you through fear'},
+urgency:{r:/(immediately|urgent|right now|today|within \d+|last warning|expires)/i,w:1,l:'Artificial urgency',want:''},
+secrecy:{r:/(do not tell|don't tell|tell no one|tell nobody|keep.{0,15}secret|stay on (the )?(video )?call)/i,w:2,l:'Isolation tactics',want:'Isolation so nobody can stop you'},
+money:{r:/(pay |transfer|deposit|send money|fine|invest|processing fee)/i,w:2,l:'Requests for money',want:'A money transfer'},
+creds:{r:/((share|send|give|tell|enter|provide|read).{0,25}(otp|pin|cvv|password)|\bkyc\b)/i,w:3,l:'Requests for sensitive information',want:'OTP or banking credentials'},
+link:{r:/(https?:\/\/|bit\.ly|www\.|click (the )?link)/i,w:1,l:'Suspicious links',want:'Personal information through a fake page'},
+remote:{r:/(anydesk|teamviewer|quicksupport|share.{0,12}screen|install .{0,20}(app|apk))/i,w:3,l:'Remote-access requests',want:'Remote access to your device'},
+easy:{r:/(guaranteed|double your|assured returns|high returns|daily profit|returns of)/i,w:2,l:'Promise of easy money',want:'Deposits that grow over time'}};
+function analyse(text,phoneOnly){
+ const hit=Object.entries(SIG).filter(([k,v])=>v.r.test(text)),score=hit.reduce((a,[k,v])=>a+v.w,0);
+ let lvl=score>=5?'high':score>=2?'med':'low';
+ if(phoneOnly)lvl='med';
+ const labels=hit.map(([k,v])=>v.l),wants=[...new Set(hit.map(([k,v])=>v.want).filter(Boolean))];
+ const why=phoneOnly?'A phone number on its own cannot tell us whether a call is genuine. Scammers often use ordinary-looking numbers, so judge the conversation, not the number.':lvl==='low'?'We did not detect strong scam indicators in this text. That does not guarantee it is safe.':'Potential scam indicators detected: '+labels.join(', ').toLowerCase()+'. Fraudulent messages often combine pressure with a request for money or information, so this interaction appears suspicious.';
+ let steps=lvl==='low'?['Do not click links; open your official app or website yourself.','Verify the source through official contact details.','If anything still feels off, check again or ask someone you trust.']:['Do not panic or follow threats.','Do not transfer money.','Do not share OTP, PIN, passwords or banking details.','Stop following instructions from the suspicious caller or sender.','Independently verify any claimed authority through official channels.','Contact a trusted family member.','If money was lost, call your bank and 1930 immediately.'];
+ if(phoneOnly)steps=['Do not call back or share details with this number.','Ask the person to identify themselves, then verify through official channels.','Describe the conversation here for a better check.'];
+ return{lvl,labels,why,wants:lvl==='low'?[]:wants,steps,summary:(lvl==='high'?'High risk. ':lvl==='med'?'Caution. ':'Low risk. ')+(labels.length?labels.slice(0,3).join(', ')+'.':'No strong indicators.')};
+}
+
+/* ---------- ROUTER ---------- */
+const NAV=[['home','🏠','Home'],['learn','📘','Learn'],['check','🔍','Check'],['safety','🛑','Emergency'],['mysafety','🛡️','My Safety'],['family','👨‍👩‍👧','Family'],['locker','🗄️','Locker']];
+const NAMES={home:'Home',learn:'Learn & Stay Informed',check:'Check a Suspicious Situation',safety:'Emergency Help',mysafety:'My Safety',family:'Family Guardian',locker:'Evidence Locker'};
+$('#nav').innerHTML='<div class="brand"><div class="logo">🛡️</div>RakshaShield</div>'+NAV.map(([k,i])=>`<button data-go="${k}" class="${k==='safety'?'sos':''}"><span>${i}</span>${NAMES[k]}</button>`).join('');
+$('#mnav').innerHTML=NAV.map(([k,i,l])=>`<button data-go="${k}" class="${k==='safety'?'sos':''}"><span>${i}</span>${l}</button>`).join('');
+function go(v){$$('.view').forEach(e=>e.classList.toggle('on',e.id===v));$$('[data-go]').forEach(b=>{if(b.closest('nav,.mobnav'))b.classList.toggle('on',b.dataset.go===v)});scrollTo(0,0);if(v==='mysafety')renderMy()}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
+
+/* ---------- HOME / LEARN ---------- */
+$('#tip').textContent=TIPS[new Date().getDate()%TIPS.length];
+$('#homeScams').innerHTML=SCAMS.map((s,i)=>`<div class="card act" data-sc="${i}"><div class="ic">${s.i}</div><h4>${s.n}</h4><p>${s.s}</p></div>`).join('');
+function drawList(f=''){f=f.toLowerCase();const list=SCAMS.map((s,i)=>[s,i]).filter(([s])=>(s.n+s.s+s.how+s.warn.join()).toLowerCase().includes(f));
+ $('#scamList').innerHTML=list.length?list.map(([s,i])=>`<div class="card act" data-sc="${i}"><div class="ic">${s.i}</div><h4>${s.n}</h4><p>${s.s}</p><span class="tag demo">Sample</span></div>`).join(''):'<p class="sub">No matching scams found.</p>'}
+drawList();$('#q').oninput=e=>drawList(e.target.value);
+$('#tactics').innerHTML=TACTICS.map(t=>`<div class="card"><div class="ic">${t[0]}</div><h4>${t[1]}</h4><p><i>${t[2]}</i></p></div>`).join('');
+$('#rbi').innerHTML=RBI.map(r=>`<div class="card"><div class="ic">✅</div><h4>${r[0]}</h4><p>${r[1]}</p><span class="tag demo">Sample educational content</span><p style="font-size:12.5px;margin-top:8px">Source: RBI (to be linked) · Last verified: not yet verified</p></div>`).join('');
+function modal(h){$('#sheet').innerHTML=h;$('#modal').classList.add('on')}
+function close(){$('#modal').classList.remove('on')}
+$('#modal').onclick=e=>{if(e.target.id==='modal'||e.target.closest('[data-x]'))close()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+document.addEventListener('click',e=>{const c=e.target.closest('[data-sc]');if(!c)return;const s=SCAMS[+c.dataset.sc],L=a=>'<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>';
+ modal(`<div class="row"><h3>${s.i} ${s.n}</h3><button class="btn ghost sm" data-x>Close</button></div><p class="sub" style="margin-top:8px">${s.s}</p><h4>How it works</h4><p class="sub">${s.how}</p><h4>What the scammer wants</h4><p class="sub">${s.want}</p><h4>Warning signs</h4>${L(s.warn)}<h4>How to protect yourself</h4>${L(s.prot)}<h4>If you have been affected</h4>${L(s.after)}<span class="tag demo">Sample educational content · Last verified: not yet verified</span>`)});
+
+/* quiz */
+let qi=0;function drawQuiz(){const done=LS.get('quiz',[]);if(qi>=QUIZ.length){$('#quiz').innerHTML=`<h4>Quiz complete 🎉</h4><p>You have finished all ${QUIZ.length} situations.</p><button class="btn" id="qr" style="margin-top:12px">Try again</button>`;$('#qr').onclick=()=>{qi=0;drawQuiz()};return}
+ const q=QUIZ[qi];$('#quiz').innerHTML=`<span class="tag">Question ${qi+1} of ${QUIZ.length}</span><h4 style="margin:10px 0">${q.t}</h4><div class="opts">${[['s','Safe'],['x','Suspicious'],['d','Dangerous']].map(o=>`<button class="opt" data-a="${o[0]}">${o[1]}</button>`).join('')}</div><div id="qf"></div>`;
+ $$('.opt',$('#quiz')).forEach(b=>b.onclick=()=>{$$('.opt',$('#quiz')).forEach(x=>x.disabled=true);const ok=b.dataset.a===q.a;b.classList.add(ok?'ok':'no');if(!ok)$$('.opt',$('#quiz')).find(x=>x.dataset.a===q.a).classList.add('ok');
+  const d=LS.get('quiz',[]);if(!d.includes(qi)){d.push(qi);LS.set('quiz',d)}
+  $('#qf').innerHTML=`<p style="margin:14px 0"><b>${ok?'Correct. ':'Not quite. '}</b>${q.e}</p><button class="btn" id="qn">${qi<QUIZ.length-1?'Next':'Finish'}</button>`;$('#qn').onclick=()=>{qi++;drawQuiz()}})}
+drawQuiz();
+
+/* ---------- CHECK ---------- */
+let tab='msg';
+$$('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;$$('.tab').forEach(x=>x.classList.toggle('on',x===b));['msg','num','desc'].forEach(k=>$('#t-'+k).hidden=k!==tab);$('#err').textContent=''});
+$$('[data-s]').forEach(b=>b.onclick=()=>$('#msg').value=b.dataset.s);
+$$('[data-d]').forEach(b=>b.onclick=()=>{const t=$('#desc');t.value=(t.value?t.value+' ':'')+b.dataset.d});
+let current=null;
+$('#analyse').onclick=()=>{const err=$('#err');err.textContent='';let text,kind;
+ if(tab==='num'){const n=$('#num').value.trim(),d=n.replace(/[\s\-()]/g,'');if(!/^(\+91|0091|91|0)?[6-9]\d{9}$/.test(d)&&!/^\+?\d{8,14}$/.test(d)){err.textContent='Please enter a valid phone number (for example +91 98765 43210).';return}text=n;kind='Phone number'}
+ else{text=$(tab==='msg'?'#msg':'#desc').value.trim();kind=tab==='msg'?'Message':'Description';if(text.length<10){err.textContent='Please add a little more detail (at least 10 characters).';return}}
+ const r=analyse(text,tab==='num');current={...r,text,kind};showResult(r)};
+function showResult(r){const M={high:['🚨','HIGH RISK'],med:['⚠️','CAUTION'],low:['✅','LOW RISK']}[r.lvl];
+ $('#result').innerHTML=`<div class="risk ${r.lvl}"><div class="big">${M[0]}</div><div><b>${M[1]}</b>Potential scam indicators are assessed, not certain. Use your judgement.</div></div>
+ <div class="grid g2"><div class="card"><h4>What We Found</h4><div style="margin-top:10px">${r.labels.length?r.labels.map(l=>`<span class="pill ${r.lvl==='med'?'med':''}">${l}</span>`).join(''):'<p>No notable warning signs detected.</p>'}</div></div>
+ <div class="card"><h4>Why This Is Suspicious</h4><p style="margin-top:8px">${r.why}</p></div>
+ ${r.wants.length?`<div class="card"><h4>What the Scammer May Want</h4><ul style="padding-left:20px;margin-top:8px;color:var(--mute)">${r.wants.map(w=>`<li>${w}</li>`).join('')}</ul></div>`:''}</div>
+ <div class="card" style="margin-top:16px"><h4>What You Should Do Now</h4><ol class="steps" style="margin-top:8px">${r.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+ <div class="row" style="margin-top:16px;justify-content:flex-start"><button class="btn red" data-go="safety">Open Safety Mode</button><button class="btn ghost" id="save">Save This Incident</button></div><p id="saved" class="sub" style="margin-top:8px"></p></div>`;
+ $('#save').onclick=()=>{const a=LS.get('inc',[]);a.unshift({d:new Date().toLocaleString(),k:current.kind,t:current.text,l:current.lvl,s:current.summary,a:current.steps[0]});LS.set('inc',a);$('#saved').textContent='Incident saved to My Safety (this device only).';$('#save').disabled=true};
+ $('#result').scrollIntoView({behavior:'smooth'})}
+
+/* ---------- SAFETY MODE ---------- */
+const SQ=['Have I been asked to transfer money?','Have I been told not to contact my family?','Have I been threatened with arrest?','Have I been asked for an OTP or PIN?','Have I been asked to install an application or share my screen?','Have I been told to remain on a video call?'];
+$('#sc').innerHTML=SQ.map((q,i)=>`<label class="chk"><input type="checkbox" data-q="${i}"><span>${q}</span></label>`).join('');
+$('#sc').onchange=()=>{const n=$$('#sc input:checked').length;$('#scMsg').textContent=n===0?'Tick anything that applies to you right now.':n<3?'Some of these are common scam tactics. Pause and verify before doing anything.':'Several strong scam signs. End the call, do not pay or share anything, and call 1930 or a trusted person.'};
+$('#sc').onchange();
+
+/* ---------- MY SAFETY ---------- */
+function renderMy(){const d=LS.get('quiz',[]).length;$('#prog').textContent=`${d}/${QUIZ.length} quiz questions answered`;$('#bar').style.width=d/QUIZ.length*100+'%';
+ const cs=LS.get('contacts',[]);$('#contacts').innerHTML=cs.length?cs.map((c,i)=>`<div class="row" style="padding:10px 0;border-top:1px solid var(--line)"><div><b>${esc(c.n)}</b><div class="sub" style="font-size:14px">${esc(c.r)}</div></div><div><button class="btn sm" data-p="${i}">Prepare Alert</button> <button class="btn ghost sm" data-rm="${i}">Remove</button></div></div>`).join(''):'<p class="sub">No trusted contacts yet. Add a demo contact above.</p>';
+ const inc=LS.get('inc',[]);const C={high:'HIGH RISK',med:'CAUTION',low:'LOW RISK'};
+ $('#incs').innerHTML=inc.length?inc.map((x,i)=>`<div class="card" style="margin-bottom:12px"><div class="row"><span class="pill ${x.l==='med'?'med':''}" style="${x.l==='low'?'background:var(--grnbg);color:var(--grn)':''}">${C[x.l]}</span><span class="sub" style="font-size:13px">${x.d} · ${x.k}</span></div><p style="margin:6px 0;color:var(--ink)">"${esc(x.t.slice(0,200))}"</p><p style="font-size:14px"><b>Summary:</b> ${esc(x.s)}</p><p style="font-size:14px"><b>Recommended action:</b> ${esc(x.a)}</p><button class="btn ghost sm" data-del="${i}" style="margin-top:8px">Delete</button></div>`).join(''):'<div class="card"><p>No saved incidents yet. Use "Save This Incident" after an analysis.</p></div>';
+ const ck=LS.get('plist',[]);$('#plist').innerHTML=CHECK.map((c,i)=>`<label class="chk" style="background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;color:var(--ink);max-width:none;margin:0"><input type="checkbox" data-c="${i}" ${ck.includes(i)?'checked':''}><span>${c}</span></label>`).join('')}
+$('#addc').onclick=()=>{const n=$('#cn').value.trim(),r=$('#cr').value.trim();if(!n)return $('#cn').focus();const a=LS.get('contacts',[]);a.push({n,r:r||'Trusted person'});LS.set('contacts',a);$('#cn').value=$('#cr').value='';renderMy()};
+document.addEventListener('change',e=>{if(e.target.dataset.c!==undefined){const a=LS.get('plist',[]),i=+e.target.dataset.c;LS.set('plist',e.target.checked?[...new Set([...a,i])]:a.filter(x=>x!==i))}});
+document.addEventListener('click',e=>{const t=e.target;
+ if(t.dataset.rm!==undefined){const a=LS.get('contacts',[]);a.splice(+t.dataset.rm,1);LS.set('contacts',a);renderMy()}
+ if(t.dataset.del!==undefined){const a=LS.get('inc',[]);a.splice(+t.dataset.del,1);LS.set('inc',a);renderMy()}
+ if(t.dataset.p!==undefined){const c=LS.get('contacts',[])[+t.dataset.p];modal(`<h3>Confirm before sharing</h3><p class="sub" style="margin:8px 0">This is a simulation. Nothing is sent automatically. Review the draft, then send it yourself.</p><div class="card" style="background:#f4f6fb"><p>Hi ${esc(c.n)}, I may be facing a scam attempt and I am not sure what to do. Please call me when you can. I am not sharing money or codes with anyone.</p></div><div class="row" style="justify-content:flex-start;margin-top:16px"><button class="btn" id="cp">Copy message</button><button class="btn ghost" data-x>Cancel</button></div>`);$('#cp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($('.sheet .card p').textContent).catch(()=>{});$('#cp').textContent='Copied. Send it yourself.'}}});
+go('home');
+</script><script src="mvp.js"></script></body></html>
